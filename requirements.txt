@@ -1,0 +1,7 @@
+psycopg2
+osmnx
+pandas
+feedparser
+selenium
+timeloop
+beautifulsoup4

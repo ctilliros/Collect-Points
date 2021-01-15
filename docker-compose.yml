@@ -1,0 +1,16 @@
+version: '3'
+
+services:  
+  collect-points:
+    build: "."
+    command: python -u collect_points_of_interest_nicosia.py           
+    restart: always         
+    external_links:
+      - postgres
+    networks:
+      - mynet
+
+networks:
+  mynet:
+    external:
+      name: mynet          
