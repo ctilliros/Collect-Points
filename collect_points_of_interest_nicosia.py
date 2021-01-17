@@ -205,13 +205,13 @@ def sample_job_every_1000s():
     from shapely.geometry import Point
     for key, value in poi_gdf.iterrows():
         if value['geometry'].geom_type == 'Polygon':
-            latitude = value['geometry'].centroid.x
-            longitude = value['geometry'].centroid.y            
-            loc_osmnx = Point([latitude, longitude]) 
+            longitude = value['geometry'].centroid.x
+            latitude = value['geometry'].centroid.y            
+            loc_osmnx = Point([longitude, latitude]) 
         elif value['geometry'].geom_type == 'Point':
-            latitude = value['geometry'].x
-            longitude = value['geometry'].y
-            loc_osmnx = Point([latitude, longitude])  
+            longitude = value['geometry'].x
+            latitude = value['geometry'].y
+            loc_osmnx = Point([longitude, latitude])  
         title = value['name']
 
         category = find_category(value['amenity'])
@@ -221,7 +221,7 @@ def sample_job_every_1000s():
         link = value['website']
         description = value['description']    
         geolocation = value['geometry']
-        postal_code = find_postal_code(latitude, longitude)
+        postal_code = find_postal_code(longitude, latitude)
         source = 1 
         if postal_code:
             sql = 'select * from points_of_interest where title =%s and latitude =%s and longitude=%s and postalcode = %s;'
@@ -302,7 +302,7 @@ def sample_job_every_1000s():
     print("To teliko")
     print(final_df)
     if len(final_df):
-        final_df = final_df.drop(['id','source_x','subcategory_x','category_x','description_x','latitude_x','longitude_x','geolocation','date_add_x'], axis=1).reset_index()
+        final_df = final_df.drop(['id','source_x','subcategory_x','category_x','description_x','latitude_x','longitude_x','date_add_x'], axis=1).reset_index()
         print("erexe ")
         for _, row in final_df.iterrows():
             for key, value in row.items():
