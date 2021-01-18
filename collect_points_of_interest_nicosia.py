@@ -278,17 +278,17 @@ def sample_job_every_1000s():
                         if j == 'term':
                             category = k            
             source = 0
-            if postal_code:
-                sql = 'select * from points_of_interest where title =%s and latitude =%s and longitude=%s and postalcode = %s;'
-                cursor.execute(sql,(title, latitude, longitude, postal_code,))
-                sql_values = cursor.fetchall()
+        if postal_code:
+            sql = 'select * from points_of_interest where title =%s and latitude =%s and longitude=%s and postalcode = %s;'
+            cursor.execute(sql,(title, latitude, longitude, postal_code,))
+            sql_values = cursor.fetchall()
+            conn.commit()
+            if not sql_values and latitude != 0 and longitude != 0:        
+                dfopendata=dfopendata.append({"title":title,"source":0,'category':category, "subcategory":subcategory, "description":description,"latitude":latitude, "longitude":longitude, "postal_code":postal_code,"date_add":date_now},ignore_index=True)
+                sql = 'insert into points_of_interest(title, source,category, subcategory, description,latitude, longitude, postalcode, date_add)\
+                 values (%s, %s, %s,%s, %s,%s,%s,%s,%s)'
+                cursor.execute(sql, (title, source, category, subcategory, description, latitude, longitude, postal_code, date_now,))
                 conn.commit()
-                if not sql_values and latitude != 0 and longitude != 0:        
-                    dfopendata=dfopendata.append({"title":title,"source":0,'category':category, "subcategory":subcategory, "description":description,"latitude":latitude, "longitude":longitude, "postal_code":postal_code,"date_add":date_now},ignore_index=True)
-                    sql = 'insert into points_of_interest(title, source,category, subcategory, description,latitude, longitude, postalcode, date_add)\
-                     values (%s, %s, %s,%s, %s,%s,%s,%s,%s)'
-                    cursor.execute(sql, (title, source, category, subcategory, description, latitude, longitude, postal_code, date_now,))
-                    conn.commit()
 
     sql = 'select * from points_of_interest;'
     df_sql = pd.read_sql(sql, conn)
