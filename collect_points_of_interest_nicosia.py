@@ -25,7 +25,7 @@ import time
 from timeloop import Timeloop
 
 # Import configurations
-from config import * 
+# from config import * 
 
 date_now = datetime.today()
 
@@ -102,6 +102,7 @@ def find_category(subcategory):
         category = 'Public Safety'
     if subcategory in health_sports:
         category = 'Health Care & Sport Facilities'
+    return category
 
 
 '''
