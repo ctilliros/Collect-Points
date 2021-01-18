@@ -30,8 +30,8 @@ from timeloop import Timeloop
 date_now = datetime.today()
 
 # Connect to postgres
-# conn = psycopg2.connect(host=host, port = postgresport, options='-c statement_timeout=1000', database=database, user=user,password=password)
-conn = psycopg2.connect(host='localhost', database='testing', user='postgres', password='9664241907')
+conn = psycopg2.connect(host=host, port = postgresport, options='-c statement_timeout=1000', database=database, user=user,password=password)
+# conn = psycopg2.connect(host='localhost', database='testing', user='postgres', password='9664241907')
 cursor = conn.cursor()
 
 '''
@@ -293,18 +293,11 @@ def sample_job_every_1000s():
     sql = 'select * from points_of_interest;'
     df_sql = pd.read_sql(sql, conn)
 
-    df = pd.concat([dfopendata, dfosmnx])
-    print("Enosi ton df")
-    print(df)
-    print("tzino pou to db")
-    print(df_sql)
+    df = pd.concat([dfopendata, dfosmnx])    
     final_df = pd.merge(df, df_sql, on=['title','title'], how="outer", indicator=True)    
-    final_df = final_df[final_df['_merge'] == 'right_only']
-    print("To teliko")
-    print(final_df)
+    final_df = final_df[final_df['_merge'] == 'right_only']        
     if len(final_df):
-        final_df = final_df.drop(['id','source_x','subcategory_x','category_x','description_x','latitude_x','longitude_x','date_add_x'], axis=1).reset_index()
-        print("erexe ")
+        final_df = final_df.drop(['id','source_x','subcategory_x','category_x','description_x','latitude_x','longitude_x','date_add_x'], axis=1).reset_index()        
         for _, row in final_df.iterrows():
             for key, value in row.items():
                 if key == 'title':
